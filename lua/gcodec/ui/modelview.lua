@@ -49,7 +49,7 @@ function self:Paint (w, h)
 	end
 	
 	-- Set rendering area
-	render.SetScissorRect (x, y, x + self:GetWide (), y + self:GetTall () - 36, true)
+	render.SetScissorRect (x, y, x + w, y + h, true)
 	
 	cam.PushModelMatrix (Matrix ())
 	
