@@ -1,0 +1,9 @@
+"AddonInfo"
+{
+	"name"        "GCodec"
+	"version"     "0.01"
+	"author_name" "!cake"
+	"author_url"  ""
+	"info"        "Those files aren't going to decode themselves."
+	"override"    "0"
+}
