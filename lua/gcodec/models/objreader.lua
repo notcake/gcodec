@@ -3,7 +3,6 @@ GCodec.ObjReader = GCodec.MakeConstructor (self, GCodec.Codec)
 
 function self:ctor (model)
 	self.Model = model
-	A = self.Model
 	
 	-- Deserialization
 	self.Data = nil
@@ -46,6 +45,8 @@ function self:Deserialize (inBuffer, callback)
 	
 	local token = self:NextToken ()
 	while token do
+		self:CheckYield ()
+		
 		if token == "v" then
 			local x, y, z, w = self:NextDouble (), self:NextDouble (), self:NextDouble (), self:NextDouble ()
 			w = w or 1
@@ -117,6 +118,8 @@ function self:Deserialize (inBuffer, callback)
 	
 	local triangleCount = 0
 	for i = 1, #self.Faces.n do
+		self:CheckYield ()
+		
 		local baseIndex = self:WriteVertex (vertexBuffer, self.Faces [1].v [i], self.Faces [1].vt [i], self.Faces [1].vn [i])
 		local index1 = self.Faces.n [i] >= 3 and self:WriteVertex (vertexBuffer, self.Faces [2].v [i], self.Faces [2].vt [i], self.Faces [2].vn [i])
 		local index2

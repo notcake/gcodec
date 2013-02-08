@@ -16,6 +16,20 @@ include ("models/model.lua")
 include ("models/modelpart.lua")
 include ("models/objreader.lua")
 
+-- Source Engine
+GCodec.Source = {}
+GCodec.Source.MDL = {}
+GCodec.Source.PHY = {}
+GCodec.Source.VVD = {}
+GCodec.Source.VTX = {}
+
+include ("source/mdl/header.lua")
+include ("source/vvd/header.lua")
+include ("source/vvd/boneweightdata.lua")
+include ("source/vvd/vertex.lua")
+include ("source/vtx/header.lua")
+include ("source/mdlreader.lua")
+
 GCodec.AddReloadCommand ("gcodec/gcodec.lua", "gcodec", "GCodec")
 
 if CLIENT then

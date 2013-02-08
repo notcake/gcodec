@@ -1,8 +1,7 @@
-local self, info = GCompute.IDE.SerializerRegistry:CreateType ("Model")
+local self, info = GCompute.IDE.SerializerRegistry:CreateType ("MdlModel")
 info:SetDocumentType ("ModelDocument")
-info:AddExtension ("obj")
+info:AddExtension ("mdl")
 info:SetCanDeserialize (true)
-info:SetCanSerialize (true)
 
 function self:ctor (document)
 end
@@ -11,8 +10,8 @@ function self:Deserialize (inBuffer, callback)
 	callback = callback or GCompute.NullCallback
 	
 	local model = GCodec.Model ()
-	local objReader = GCodec.ObjReader (model)
-	objReader:Deserialize (inBuffer, function (success)
+	local mdlReader = GCodec.Source.MdlReader (model)
+	mdlReader:Deserialize (inBuffer, function (success)
 		self.Document:SetModel (model)
 		callback (success)
 	end)

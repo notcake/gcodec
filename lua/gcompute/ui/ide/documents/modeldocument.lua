@@ -6,7 +6,9 @@ function self:ctor ()
 end
 
 function self:dtor ()
-	self.Model:dtor ()
+	if self.Model then
+		self.Model:dtor ()
+	end
 end
 
 function self:GetModel ()
@@ -14,8 +16,12 @@ function self:GetModel ()
 end
 
 function self:SetModel (model)
+	if self.Model == model then return end
+	
 	if self.Model then
 		self.Model:dtor ()
 	end
 	self.Model = model
+	
+	self:DispatchEvent ("ModelChanged", self.Model)
 end

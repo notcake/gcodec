@@ -2,8 +2,7 @@ local self, info = GCompute.IDE.ViewTypes:CreateType ("Model")
 info:SetDocumentType ("ModelDocument")
 
 function self:ctor (container)
-	self.Document = nil
-	self.SavableProxy = GCompute.SavableProxy ()
+	self:CreateSavableProxy ()
 	
 	self.ModelView = vgui.Create ("GCodecModelView", container)
 	
@@ -11,34 +10,6 @@ function self:ctor (container)
 end
 
 function self:dtor ()
-	if self:GetDocument () then
-		self:GetDocument ():RemoveView (self)
-	end
-end
-
-function self:SetDocument (document)
-	if oldDocument then
-		oldDocument:RemoveView (self)
-	end
-	self.Document = document
-	if document then
-		document:AddView (self)
-	end
-	self.SavableProxy:SetSavable (document)
-	
-	self:DispatchEvent ("DocumentChanged", oldDocument, document)
-	
-	if not document then return end
-	self.ModelView:SetModel (document:GetModel ())
-end
-
--- Components
-function self:GetDocument ()
-	return self.Document
-end
-
-function self:GetSavable ()
-	return self.SavableProxy
 end
 
 -- Persistance
@@ -76,6 +47,16 @@ function self:CreateFileChangeNotificationBar ()
 end
 
 -- Event handlers
+function self:OnDocumentChanged (oldDocument, document)
+	if not document then return end
+	
+	self:OnDocumentLoaded (document, false)
+end
+
+function self:OnDocumentLoaded (document, reloaded)
+	self.ModelView:SetModel (document:GetModel ())
+end
+
 function self:PerformLayout (w, h)
 	local y = 0
 	

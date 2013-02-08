@@ -1,6 +1,7 @@
 local self = {}
-local defaultMaterial   = Material ("models/debug/debugwhite")
-local wireframeMaterial = Material ("models/wireframe")
+local defaultMaterial     = Material ("models/debug/debugwhite")
+local vertexColorMaterial = Material ("debug/debugvertexcolor")
+local wireframeMaterial   = Material ("models/wireframe")
 
 function self:Init ()
 	self.DirectionalLight = {}
@@ -32,7 +33,6 @@ function self:Paint (w, h)
 	local campos = targetpos - angle:Forward () * (self.Model:GetAABBMax () - self.Model:GetAABBMin ()):Length () * 0.5 * 1.5
 	
 	cam.Start3D (campos, angle, self.FOV, x, y, w, h)
-	cam.IgnoreZ (true)
 	
 	-- Setup lighting
 	-- render.SuppressEngineLighting (true)
@@ -54,32 +54,35 @@ function self:Paint (w, h)
 	cam.PushModelMatrix (Matrix ())
 	
 	-- Draw axes
+	render.SetMaterial (vertexColorMaterial)
+	render.SetColorModulation (self.Color.r / 255, self.Color.g / 255, self.Color.b / 255)
 	mesh.Begin (MATERIAL_LINES, 3)
 	
 	mesh.Color (GLib.Colors.Red.r, GLib.Colors.Red.g, GLib.Colors.Red.b, GLib.Colors.Red.a)
-	mesh.Position (Vector (0, 0, 0))
+	mesh.Position (Vector (-  64, 0, 0))
 	mesh.AdvanceVertex ()
-	mesh.Position (Vector (1024, 0, 0))
+	mesh.Position (Vector ( 1024, 0, 0))
 	mesh.AdvanceVertex ()
 	
 	mesh.Color (GLib.Colors.Green.r, GLib.Colors.Green.g, GLib.Colors.Green.b, GLib.Colors.Green.a)
-	mesh.Position (Vector (0, 0, 0))
+	mesh.Position (Vector (0, -  64, 0))
 	mesh.AdvanceVertex ()
-	mesh.Position (Vector (0, 1024, 0))
+	mesh.Position (Vector (0,  1024, 0))
 	mesh.AdvanceVertex ()
 	
 	mesh.Color (GLib.Colors.Blue.r, GLib.Colors.Blue.g, GLib.Colors.Blue.b, GLib.Colors.Blue.a)
-	mesh.Position (Vector (0, 0, 0))
+	mesh.Position (Vector (0, 0, -  64))
 	mesh.AdvanceVertex ()
-	mesh.Position (Vector (0, 0, 1024))
+	mesh.Position (Vector (0, 0,  1024))
 	mesh.AdvanceVertex ()
 	
 	mesh.End ()
 	
 	-- Draw model
 	render.SetMaterial (wireframeMaterial)
-	render.SetColorModulation (self.Color.r / 255, self.Color.g / 255, self.Color.b / 255)
+	local triangleCount = 0
 	for part in self.Model:GetPartEnumerator () do
+		triangleCount = triangleCount + part:GetTriangleCount ()
 		part:GetMesh ():Draw ()
 	end
 	
@@ -90,11 +93,11 @@ function self:Paint (w, h)
 	-- Restore lighting
 	-- render.SuppressEngineLighting (false)
 	
-	cam.IgnoreZ (false)
 	cam.End3D ()
 	
 	draw.SimpleText (self.Model:GetVertexCount () .. " vertices", "DermaDefault", w - 8, 8, GLib.Colors.Black, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
 	draw.SimpleText (self.Model:GetIndexCount () .. " indices", "DermaDefault", w - 8, 24, GLib.Colors.Black, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
+	draw.SimpleText (triangleCount .. " triangles", "DermaDefault", w - 8, 40, GLib.Colors.Black, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
 end
 
 function self:SetDirectionalLight (direction, color)
