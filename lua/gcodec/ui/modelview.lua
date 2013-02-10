@@ -83,8 +83,12 @@ function self:Paint (w, h)
 	local triangleCount = 0
 	for part in self.Model:GetPartEnumerator () do
 		triangleCount = triangleCount + part:GetTriangleCount ()
+		render.CullMode (MATERIAL_CULLMODE_CCW)
+		part:GetMesh ():Draw ()
+		render.CullMode (MATERIAL_CULLMODE_CW)
 		part:GetMesh ():Draw ()
 	end
+	render.CullMode (MATERIAL_CULLMODE_CCW)
 	
 	cam.PopModelMatrix ()
 	
