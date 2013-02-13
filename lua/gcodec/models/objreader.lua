@@ -37,7 +37,7 @@ function self:ctor (model)
 	}
 end
 
-function self:Deserialize (inBuffer, callback)
+function self:Deserialize (inBuffer, callback, resource)
 	self.Data = inBuffer:Bytes (inBuffer:GetBytesRemaining ())
 	
 	local aabbMin = Vector ( math.huge,  math.huge,  math.huge)
@@ -139,7 +139,7 @@ function self:Deserialize (inBuffer, callback)
 	callback (true)
 end
 
-function self:Serialize (outBuffer, callback)
+function self:Serialize (outBuffer, callback, resource)
 	
 end
 

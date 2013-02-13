@@ -7,18 +7,21 @@ info:SetCanSerialize (true)
 function self:ctor (document)
 end
 
-function self:Deserialize (inBuffer, callback)
+function self:Deserialize (inBuffer, callback, resource)
 	callback = callback or GCompute.NullCallback
 	
 	local model = GCodec.Model ()
-	local objReader = GCodec.ObjReader (model)
-	objReader:Deserialize (inBuffer, function (success)
-		self.Document:SetModel (model)
-		callback (success)
-	end)
+	local objReader = GCodec.ObjReader (model, self:GetResourceLocator ())
+	objReader:Deserialize (inBuffer,
+		function (success)
+			self.Document:SetModel (model)
+			callback (success)
+		end,
+		resource
+	)
 end
 
-function self:Serialize (outBuffer, callback)
+function self:Serialize (outBuffer, callback, resource)
 	callback = callback or GCompute.NullCallback
 	callback (true)
 end

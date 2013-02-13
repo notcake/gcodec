@@ -2,6 +2,8 @@ local self = {}
 GCodec.Source.MDL.Header = GCodec.MakeConstructor (self)
 
 function self:ctor ()
+	self.Offset = 0
+	
 	self.Magic    = ""
 	self.Version  = 0
 	self.Checksum = 0
@@ -119,6 +121,8 @@ end
 
 function self:Deserialize (inBuffer, callback)
 	callback = callback or GCodec.NullCallback
+	
+	self.Offset = inBuffer:GetSeekPos ()
 	
 	self.Magic = inBuffer:Bytes (4)
 	
