@@ -55,9 +55,8 @@ function self:Deserialize (inBuffer, callback, resource)
 		
 		self:ReadResource (resource, resource:GetNameWithoutExtension () .. vtxExtensions [i],
 			function (success, inBuffer)
-				if not success then print ("FAIL ON " .. resource:GetNameWithoutExtension () .. vtxExtensions [i]) nextVTXExtension () return end
+				if not success then nextVTXExtension () return end
 				
-				print ("SUCCESS ON " .. resource:GetNameWithoutExtension () .. vtxExtensions [i])
 				self.VTXHeader:Deserialize (inBuffer)
 				
 				local bodyPartOffset = self.VTXHeader.Offset + self.VTXHeader.BodyPartOffset
@@ -99,6 +98,15 @@ function self:Deserialize (inBuffer, callback, resource)
 									inBuffer:SeekTo (stripGroupOffset)
 									stripGroup:Deserialize (inBuffer)
 									stripGroupOffset = inBuffer:GetSeekPos ()
+									
+									local stripOffset = stripGroup.Offset + stripGroup.StripOffset
+									for stripId = 1, stripGroup.StripCount do
+										local strip = GCodec.Source.VTX.Strip ()
+										stripGroup.Strips [#stripGroup.Strips + 1] = strip
+										inBuffer:SeekTo (stripOffset)
+										strip:Deserialize (inBuffer)
+										stripOffset = inBuffer:GetSeekPos ()
+									end
 								end
 							end
 						end
@@ -107,6 +115,7 @@ function self:Deserialize (inBuffer, callback, resource)
 			end
 		)
 	end
+	nextVTXExtension ()
 	
 	callback (true)
 end

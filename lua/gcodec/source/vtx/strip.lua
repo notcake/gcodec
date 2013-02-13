@@ -22,6 +22,7 @@ function self:Deserialize (inBuffer)
 	self.VertexCount = inBuffer:UInt32 ()
 	self.VertexOffset = inBuffer:UInt32 ()
 	self.BoneCount = inBuffer:UInt16 ()
+	self.Flags = inBuffer:UInt8 ()
 	self.BoneStateChangeCount = inBuffer:UInt32 ()
 	self.BoneStateChangeOffset = inBuffer:UInt32 ()
 end
