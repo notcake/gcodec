@@ -17,6 +17,7 @@ include ("defaultresourcelocator.lua")
 -- Models
 include ("models/model.lua")
 include ("models/modelpart.lua")
+include ("models/mesh.lua")
 include ("models/objreader.lua")
 
 -- Source Engine
