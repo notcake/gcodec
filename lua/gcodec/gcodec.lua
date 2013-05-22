@@ -5,9 +5,9 @@ include ("glib/glib.lua")
 include ("gooey/gooey.lua")
 
 GLib.Initialize ("GCodec", GCodec)
+GLib.AddCSLuaPackSystem ("GCodec")
 GLib.AddCSLuaPackFile ("autorun/gcodec.lua")
 GLib.AddCSLuaPackFolderRecursive ("gcodec")
-GLib.AddCSLuaPackSystem ("GCodec")
 
 include ("codec.lua")
 
