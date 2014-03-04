@@ -3,6 +3,7 @@ GCodec = GCodec or {}
 
 include ("glib/glib.lua")
 include ("gooey/gooey.lua")
+pcall (include, "gcompute/gcompute.lua")
 
 GLib.Initialize ("GCodec", GCodec)
 GLib.AddCSLuaPackSystem ("GCodec")
