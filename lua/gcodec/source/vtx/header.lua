@@ -20,7 +20,7 @@ end
 function self:Deserialize (inBuffer, callback)
 	callback = callback or GCodec.NullCallback
 	
-	self.Offset = inBuffer:GetSeekPos ()
+	self.Offset = inBuffer:GetPosition ()
 	
 	self.Version = inBuffer:UInt32 ()
 	self.VertexCacheSize = inBuffer:UInt32 ()

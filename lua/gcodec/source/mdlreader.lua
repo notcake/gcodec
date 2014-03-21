@@ -65,7 +65,7 @@ function self:Deserialize (inBuffer, callback, resource)
 					self.VTXBodyParts [#self.VTXBodyParts + 1] = bodyPart
 					inBuffer:SeekTo (bodyPartOffset)
 					bodyPart:Deserialize (inBuffer)
-					bodyPartOffset = inBuffer:GetSeekPos ()
+					bodyPartOffset = inBuffer:GetPosition ()
 					
 					local modelOffset = bodyPart.Offset + bodyPart.ModelOffset
 					for modelId = 1, bodyPart.ModelCount do
@@ -73,7 +73,7 @@ function self:Deserialize (inBuffer, callback, resource)
 						bodyPart.Models [#bodyPart.Models + 1] = model
 						inBuffer:SeekTo (modelOffset)
 						model:Deserialize (inBuffer)
-						modelOffset = inBuffer:GetSeekPos ()
+						modelOffset = inBuffer:GetPosition ()
 						
 						local lodOffset = model.Offset + model.LODOffset
 						for lodId = 1, model.LODCount do
@@ -81,7 +81,7 @@ function self:Deserialize (inBuffer, callback, resource)
 							model.LODs [#model.LODs + 1] = lod
 							inBuffer:SeekTo (lodOffset)
 							lod:Deserialize (inBuffer)
-							lodOffset = inBuffer:GetSeekPos ()
+							lodOffset = inBuffer:GetPosition ()
 							
 							local meshOffset = lod.Offset + lod.MeshOffset
 							for meshId = 1, lod.MeshCount do
@@ -89,7 +89,7 @@ function self:Deserialize (inBuffer, callback, resource)
 								lod.Meshes [#lod.Meshes + 1] = mesh
 								inBuffer:SeekTo (meshOffset)
 								mesh:Deserialize (inBuffer)
-								meshOffset = inBuffer:GetSeekPos ()
+								meshOffset = inBuffer:GetPosition ()
 								
 								local stripGroupOffset = mesh.Offset + mesh.StripGroupOffset
 								for stripGroupId = 1, mesh.StripGroupCount do
@@ -97,7 +97,7 @@ function self:Deserialize (inBuffer, callback, resource)
 									mesh.StripGroups [#mesh.StripGroups + 1] = stripGroup
 									inBuffer:SeekTo (stripGroupOffset)
 									stripGroup:Deserialize (inBuffer)
-									stripGroupOffset = inBuffer:GetSeekPos ()
+									stripGroupOffset = inBuffer:GetPosition ()
 									
 									local stripOffset = stripGroup.Offset + stripGroup.StripOffset
 									for stripId = 1, stripGroup.StripCount do
@@ -105,7 +105,7 @@ function self:Deserialize (inBuffer, callback, resource)
 										stripGroup.Strips [#stripGroup.Strips + 1] = strip
 										inBuffer:SeekTo (stripOffset)
 										strip:Deserialize (inBuffer)
-										stripOffset = inBuffer:GetSeekPos ()
+										stripOffset = inBuffer:GetPosition ()
 									end
 								end
 							end

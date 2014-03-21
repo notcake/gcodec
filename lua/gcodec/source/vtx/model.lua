@@ -11,7 +11,7 @@ function self:ctor ()
 end
 
 function self:Deserialize (inBuffer)
-	self.Offset = inBuffer:GetSeekPos ()
+	self.Offset = inBuffer:GetPosition ()
 	
 	self.LODCount = inBuffer:UInt32 ()
 	self.LODOffset = inBuffer:UInt32 ()

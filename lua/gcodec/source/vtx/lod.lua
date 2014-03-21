@@ -12,7 +12,7 @@ function self:ctor ()
 end
 
 function self:Deserialize (inBuffer)
-	self.Offset = inBuffer:GetSeekPos ()
+	self.Offset = inBuffer:GetPosition ()
 	
 	self.MeshCount = inBuffer:UInt32 ()
 	self.MeshOffset = inBuffer:UInt32 ()

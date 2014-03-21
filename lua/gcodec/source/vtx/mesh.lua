@@ -12,7 +12,7 @@ function self:ctor ()
 end
 
 function self:Deserialize (inBuffer)
-	self.Offset = inBuffer:GetSeekPos ()
+	self.Offset = inBuffer:GetPosition ()
 	
 	self.StripGroupCount = inBuffer:UInt32 ()
 	self.StripGroupOffset = inBuffer:UInt32 ()
