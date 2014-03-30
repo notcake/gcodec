@@ -56,11 +56,7 @@ function self:GetPartCount ()
 end
 
 function self:GetPartEnumerator ()
-	local i = 0
-	return function ()
-		i = i + 1
-		return self.Parts [i]
-	end
+	return GLib.ArrayEnumerator (self.Parts)
 end
 
 function self:GetVertexBuffer ()
