@@ -82,7 +82,7 @@ function self:Paint (w, h)
 	mesh.End ()
 	
 	-- Draw model
-	render.SetMaterial (wireframeMaterial)
+	render.SetMaterial (defaultMaterial)
 	local triangleCount = 0
 	for part in self.Model:GetPartEnumerator () do
 		triangleCount = triangleCount + part:GetTriangleCount ()
@@ -113,6 +113,11 @@ end
 
 function self:SetModel (model)
 	self.Model = model
+end
+
+-- Events
+function self:OnMouseMove (...)
+	
 end
 
 Gooey.Register ("GCodecModelView", self, "GPanel")

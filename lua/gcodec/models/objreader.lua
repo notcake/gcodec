@@ -32,7 +32,7 @@ function self:ctor (model)
 	}
 	self.Faces =
 	{
-		n = {},
+		FaceTriangleCounts = {},
 		[1] = { v = {}, vt = {}, vn = {} }
 	}
 end
@@ -89,13 +89,13 @@ function self:Deserialize (inBuffer, callback, resource)
 				
 				self.Faces [i] = self.Faces [i] or { v = {}, vt = {}, vn = {} }
 				
-				self.Faces [i].v  [#self.Faces.n + 1] = vertexId
-				self.Faces [i].vt [#self.Faces.n + 1] = texCoordId
-				self.Faces [i].vn [#self.Faces.n + 1] = normalId
+				self.Faces [i].v  [#self.Faces.FaceTriangleCounts + 1] = vertexId
+				self.Faces [i].vt [#self.Faces.FaceTriangleCounts + 1] = texCoordId
+				self.Faces [i].vn [#self.Faces.FaceTriangleCounts + 1] = normalId
 				
 				i = i + 1
 			end
-			self.Faces.n [#self.Faces.n + 1] = i - 1
+			self.Faces.FaceTriangleCounts [#self.Faces.FaceTriangleCounts + 1] = i - 1
 		elseif token == "mtllib" then
 			local libraryName = self:NextToken ()
 		elseif token == "usemtl" then
@@ -117,14 +117,14 @@ function self:Deserialize (inBuffer, callback, resource)
 	part:SetStartIndex (1)
 	
 	local triangleCount = 0
-	for i = 1, #self.Faces.n do
+	for i = 1, #self.Faces.FaceTriangleCounts do
 		self:CheckYield ()
 		
 		local baseIndex = self:WriteVertex (vertexBuffer, self.Faces [1].v [i], self.Faces [1].vt [i], self.Faces [1].vn [i])
-		local index1 = self.Faces.n [i] >= 3 and self:WriteVertex (vertexBuffer, self.Faces [2].v [i], self.Faces [2].vt [i], self.Faces [2].vn [i])
+		local index1 = self.Faces.FaceTriangleCounts [i] >= 3 and self:WriteVertex (vertexBuffer, self.Faces [2].v [i], self.Faces [2].vt [i], self.Faces [2].vn [i])
 		local index2
-		for j = 3, self.Faces.n [i] do
-			index2 = self:WriteVertex (vertexBuffer, self.Faces [3].v [i], self.Faces [3].vt [i], self.Faces [3].vn [i])
+		for j = 3, self.Faces.FaceTriangleCounts [i] do
+			index2 = self:WriteVertex (vertexBuffer, self.Faces [j].v [i], self.Faces [j].vt [i], self.Faces [j].vn [i])
 			
 			indexBuffer [#indexBuffer + 1] = baseIndex
 			indexBuffer [#indexBuffer + 1] = index1
