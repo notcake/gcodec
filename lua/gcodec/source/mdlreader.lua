@@ -20,7 +20,7 @@ function self:Deserialize (inBuffer, callback, resource)
 			if not success then return end
 			
 			self.VVDHeader:Deserialize (inBuffer)
-			inBuffer:SeekTo (self.VVDHeader.Offset + self.VVDHeader.VertexDataOffset)
+			inBuffer:SeekAbsolute (self.VVDHeader.Offset + self.VVDHeader.VertexDataOffset)
 			
 			-- Read vertices
 			local vertexBuffer = self.Model:GetVertexBuffer ()
@@ -63,7 +63,7 @@ function self:Deserialize (inBuffer, callback, resource)
 				for bodyPartId = 1, self.VTXHeader.BodyPartCount do
 					local bodyPart = GCodec.Source.VTX.BodyPart ()
 					self.VTXBodyParts [#self.VTXBodyParts + 1] = bodyPart
-					inBuffer:SeekTo (bodyPartOffset)
+					inBuffer:SeekAbsolute (bodyPartOffset)
 					bodyPart:Deserialize (inBuffer)
 					bodyPartOffset = inBuffer:GetPosition ()
 					
@@ -71,7 +71,7 @@ function self:Deserialize (inBuffer, callback, resource)
 					for modelId = 1, bodyPart.ModelCount do
 						local model = GCodec.Source.VTX.Model ()
 						bodyPart.Models [#bodyPart.Models + 1] = model
-						inBuffer:SeekTo (modelOffset)
+						inBuffer:SeekAbsolute (modelOffset)
 						model:Deserialize (inBuffer)
 						modelOffset = inBuffer:GetPosition ()
 						
@@ -79,7 +79,7 @@ function self:Deserialize (inBuffer, callback, resource)
 						for lodId = 1, model.LODCount do
 							local lod = GCodec.Source.VTX.LOD ()
 							model.LODs [#model.LODs + 1] = lod
-							inBuffer:SeekTo (lodOffset)
+							inBuffer:SeekAbsolute (lodOffset)
 							lod:Deserialize (inBuffer)
 							lodOffset = inBuffer:GetPosition ()
 							
@@ -87,7 +87,7 @@ function self:Deserialize (inBuffer, callback, resource)
 							for meshId = 1, lod.MeshCount do
 								local mesh = GCodec.Source.VTX.Mesh ()
 								lod.Meshes [#lod.Meshes + 1] = mesh
-								inBuffer:SeekTo (meshOffset)
+								inBuffer:SeekAbsolute (meshOffset)
 								mesh:Deserialize (inBuffer)
 								meshOffset = inBuffer:GetPosition ()
 								
@@ -95,7 +95,7 @@ function self:Deserialize (inBuffer, callback, resource)
 								for stripGroupId = 1, mesh.StripGroupCount do
 									local stripGroup = GCodec.Source.VTX.StripGroup ()
 									mesh.StripGroups [#mesh.StripGroups + 1] = stripGroup
-									inBuffer:SeekTo (stripGroupOffset)
+									inBuffer:SeekAbsolute (stripGroupOffset)
 									stripGroup:Deserialize (inBuffer)
 									stripGroupOffset = inBuffer:GetPosition ()
 									
@@ -103,7 +103,7 @@ function self:Deserialize (inBuffer, callback, resource)
 									for stripId = 1, stripGroup.StripCount do
 										local strip = GCodec.Source.VTX.Strip ()
 										stripGroup.Strips [#stripGroup.Strips + 1] = strip
-										inBuffer:SeekTo (stripOffset)
+										inBuffer:SeekAbsolute (stripOffset)
 										strip:Deserialize (inBuffer)
 										stripOffset = inBuffer:GetPosition ()
 									end
