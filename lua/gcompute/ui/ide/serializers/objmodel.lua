@@ -7,6 +7,11 @@ info:SetCanSerialize (true)
 function self:ctor (document)
 end
 
+function self:Serialize (outBuffer, callback, resource)
+	callback = callback or GCompute.NullCallback
+	callback (true)
+end
+
 function self:Deserialize (inBuffer, callback, resource)
 	callback = callback or GCompute.NullCallback
 	
@@ -19,9 +24,4 @@ function self:Deserialize (inBuffer, callback, resource)
 		end,
 		resource
 	)
-end
-
-function self:Serialize (outBuffer, callback, resource)
-	callback = callback or GCompute.NullCallback
-	callback (true)
 end

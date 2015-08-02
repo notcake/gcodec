@@ -38,12 +38,12 @@ function self:ReadResource (baseResource, resourcePath, callback)
 end
 
 -- Serialization
-function self:Deserialize (inBuffer, callback, resource)
-	GCodec.Error ("Codec:Deserialize : Not implemented.")
+function self:Serialize (outBuffer, callback, resource)
+	GCodec.Error ("Codec:Serialize : Not implemented.")
 	callback (false)
 end
 
-function self:Serialize (outBuffer, callback, resource)
-	GCodec.Error ("Codec:Serialize : Not implemented.")
+function self:Deserialize (inBuffer, callback, resource)
+	GCodec.Error ("Codec:Deserialize : Not implemented.")
 	callback (false)
 end
