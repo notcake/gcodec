@@ -15,6 +15,7 @@ end
 
 function self:Deserialize (inBuffer)
 	self.BoneWeightData:Deserialize (inBuffer)
+	
 	self.x  = inBuffer:Float ()
 	self.y  = inBuffer:Float ()
 	self.z  = inBuffer:Float ()
@@ -23,4 +24,6 @@ function self:Deserialize (inBuffer)
 	self.nz = inBuffer:Float ()
 	self.u  = inBuffer:Float ()
 	self.v  = inBuffer:Float ()
+	
+	return self
 end
