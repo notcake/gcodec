@@ -229,7 +229,7 @@ function self:Deserialize (inBuffer, callback)
 	self.RootLOD = inBuffer:UInt32 ()
 	self.AllowedRootLODCount = inBuffer:UInt32 ()
 	
-	self.Unused1 = inBuffer:Char ()
+	self.Unused1 = inBuffer:UInt8 ()
 	self.Unused2 = inBuffer:UInt32 ()
 	
 	self.FlexControllerUICount  = inBuffer:UInt32 ()
