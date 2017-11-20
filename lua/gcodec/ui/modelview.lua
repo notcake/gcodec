@@ -14,6 +14,8 @@ function self:Init ()
 	self:SetDirectionalLight (BOX_FRONT, Color (255, 255, 255))
 	
 	self.Model = nil
+	
+	self.CameraDistanceFactor = 1.5
 end
 
 function self:GetModel ()
@@ -27,16 +29,18 @@ function self:Paint (w, h)
 	
 	local x, y = self:LocalToScreen (0, 0)
 	
-	local targetpos = 0.5 * (self.Model:GetAABBMin () + self.Model:GetAABBMax ())
+	local aabbCentre = 0.5 * (self.Model:GetAABBMin () + self.Model:GetAABBMax ())
 	
 	local angle = Angle (10, SysTime () * 10, 0)
-	local campos = targetpos - angle:Forward () * (self.Model:GetAABBMax () - self.Model:GetAABBMin ()):Length () * 0.5 * 1.5
+	local distance = (self.Model:GetAABBMax () - self.Model:GetAABBMin ()):Length () * 0.5
+	distance = distance * self.CameraDistanceFactor
+	local cameraPosition = aabbCentre - angle:Forward () * distance
 	
-	cam.Start3D (campos, angle, self.FOV, x, y, w, h)
+	cam.Start3D (cameraPosition, angle, self.FOV, x, y, w, h)
 	
 	-- Setup lighting
 	-- render.SuppressEngineLighting (true)
-	render.SetLightingOrigin (targetpos)
+	render.SetLightingOrigin (aabbCentre)
 	render.ResetModelLighting (self.AmbientLight.r / 255, self.AmbientLight.g / 255, self.AmbientLight.b / 255)
 	render.SetColorModulation (self.Color.r / 255, self.Color.g / 255, self.Color.b / 255)
 	render.SetBlend (self.Color.a / 255)
@@ -102,9 +106,9 @@ function self:Paint (w, h)
 	
 	cam.End3D ()
 	
-	draw.SimpleText (self.Model:GetVertexCount () .. " vertices", "DermaDefault", w - 8, 8, GLib.Colors.Black, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
-	draw.SimpleText (self.Model:GetIndexCount () .. " indices", "DermaDefault", w - 8, 24, GLib.Colors.Black, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
-	draw.SimpleText (triangleCount .. " triangles", "DermaDefault", w - 8, 40, GLib.Colors.Black, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
+	draw.SimpleText (self.Model:GetVertexCount () .. " vertices", "DermaDefault", w - 8, 8, GLib.Colors.Black, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+	draw.SimpleText (self.Model:GetIndexCount () .. " indices", "DermaDefault", w - 8, 24, GLib.Colors.Black, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+	draw.SimpleText (triangleCount .. " triangles", "DermaDefault", w - 8, 40, GLib.Colors.Black, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 end
 
 function self:SetDirectionalLight (direction, color)
@@ -118,6 +122,11 @@ end
 -- Events
 function self:OnMouseMove (...)
 	
+end
+
+function self:OnMouseWheel (delta, x, y)
+	self.CameraDistanceFactor = math.max (1, self.CameraDistanceFactor - delta * 0.2)
+	return true
 end
 
 Gooey.Register ("GCodecModelView", self, "GPanel")
